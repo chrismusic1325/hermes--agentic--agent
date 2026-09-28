@@ -85,7 +85,7 @@ hermes tools list --platform cli 2>/dev/null || true
 
 echo
 if [ "$fail" -eq 0 ]; then
-  echo "RESULT: CORE LOCAL $0 PROFILE VERIFIED"
+  echo 'RESULT: CORE LOCAL $0 PROFILE VERIFIED'
 else
   echo "RESULT: VERIFY FOUND A CONFIGURATION PROBLEM"
   exit 1
