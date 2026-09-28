@@ -14,14 +14,14 @@ if ! command -v hermes >/dev/null 2>&1; then
 fi
 
 echo "============================================================"
-echo " APPLYING HERMES AGENTIC $0 PROFILE"
+echo ' APPLYING HERMES AGENTIC $0 PROFILE'
 echo "============================================================"
 echo "Model:      $MODEL"
 echo "Endpoint:   $BASE_URL"
 echo "Context:    $CONTEXT"
 echo "Reasoning:  $REASONING"
 echo "Terminal:   local"
-echo "Budget:     $0"
+echo 'Budget:     $0'
 echo
 
 # Primary inference: explicit local Ollama route.
