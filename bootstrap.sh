@@ -16,32 +16,33 @@ fi
 
 echo "[1/6] Installing/updating official Hermes Agent..."
 
+UPDATED=0
 if command -v hermes >/dev/null 2>&1; then
   if command -v python3 >/dev/null 2>&1; then
-    python3 - <<'PY' || true
-import subprocess
+    if python3 - <<'PY'
+import subprocess, sys
 try:
     subprocess.run(["hermes", "update"], check=True, timeout=600)
 except Exception as exc:
     print(f"Hermes updater did not finish cleanly: {exc}")
+    sys.exit(1)
 PY
-  else
-    hermes update || true
+    then
+      UPDATED=1
+    fi
+  elif hermes update; then
+    UPDATED=1
   fi
 fi
 
-# Official installer is also the recovery path if Hermes is absent or its
-# updater failed. It tracks the current official Hermes release/main install.
-if ! command -v hermes >/dev/null 2>&1; then
+# Use the official installer as both first-install and update-recovery path.
+if [ "$UPDATED" -ne 1 ]; then
   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
-fi
-
-if ! command -v hermes >/dev/null 2>&1; then
   export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 
 if ! command -v hermes >/dev/null 2>&1; then
-  echo "ERROR: Hermes is still unavailable after the official installer."
+  echo "ERROR: Hermes is unavailable after the official installer."
   exit 1
 fi
 
@@ -81,12 +82,8 @@ fi
 echo "Ollama server: WORKING"
 
 echo
-echo "[4/6] Ensuring local model is installed..."
-if ! ollama list 2>/dev/null | awk 'NR>1 {print $1}' | grep -Fxq "$MODEL"; then
-  ollama pull "$MODEL"
-else
-  echo "$MODEL is already installed."
-fi
+echo "[4/6] Ensuring local model is installed/current..."
+ollama pull "$MODEL"
 
 echo
 echo "[5/6] Applying local $0 agentic profile..."
