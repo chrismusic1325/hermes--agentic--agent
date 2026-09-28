@@ -5,7 +5,7 @@ ROOT="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 MODEL="${HERMES_LOCAL_MODEL:-gemma4:12b}"
 
 echo "============================================================"
-echo " HERMES AGENTIC AGENT — $0 LOCAL BOOTSTRAP"
+echo ' HERMES AGENTIC AGENT — $0 LOCAL BOOTSTRAP'
 echo "============================================================"
 echo
 
@@ -86,7 +86,7 @@ echo "[4/6] Ensuring local model is installed/current..."
 ollama pull "$MODEL"
 
 echo
-echo "[5/6] Applying local $0 agentic profile..."
+echo '[5/6] Applying local $0 agentic profile...'
 "$ROOT/apply-profile.sh"
 
 echo
