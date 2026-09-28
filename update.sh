@@ -68,7 +68,7 @@ fi
 ollama pull "$MODEL"
 
 echo
-echo "[4/5] Reapplying $0 agentic profile..."
+echo '[4/5] Reapplying $0 agentic profile...'
 "$ROOT/apply-profile.sh"
 
 echo
