@@ -88,6 +88,14 @@ hermes config unset web.search_backend >/dev/null 2>&1 || true
 hermes config unset web.extract_backend >/dev/null 2>&1 || true
 hermes config set web.keyless_fallback true >/dev/null 2>&1 || true
 
+# Keep speech on the free provider selected in the current setup.
+hermes config set tts.provider edge >/dev/null 2>&1 || true
+
+# Do not retain a separately configured paid image/video generation route.
+# Analysis/editing workflows remain available through vision/video/skills.
+hermes config unset image_gen.provider >/dev/null 2>&1 || true
+hermes config unset video_gen.provider >/dev/null 2>&1 || true
+
 # Core agentic capabilities. Unavailable tools remain runtime-gated by Hermes.
 CORE_TOOLSETS=(
   terminal
@@ -105,15 +113,12 @@ CORE_TOOLSETS=(
   web
   search
   cronjob
+  tts
 )
 
 for toolset in "${CORE_TOOLSETS[@]}"; do
   hermes tools enable "$toolset" --platform cli >/dev/null 2>&1 || true
 done
-
-# Image generation was intentionally not configured in the $0 setup. Keep it
-# disabled so an old paid image provider cannot be invoked accidentally.
-hermes tools disable image_gen --platform cli >/dev/null 2>&1 || true
 
 # Ensure the Browser Use harness is installed when the current Hermes build
 # exposes its post-setup hook. Failure here does not disable terminal/file work.
